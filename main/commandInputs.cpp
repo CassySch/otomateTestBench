@@ -19,31 +19,26 @@ const char* commandType;
     // Iterate over the members of the JSON object
 for (JsonPair member : doc.as<JsonObject>()) {
   const char* currentKey = member.key().c_str();
-  
+  //command verification
+    if (strcmp(currentKey,"command") == 0 && member.value().is<String>()) commandType = member.value();
+    else if (strcmp(currentKey,"command") == 0 && !(member.value().is<String>())) Serial.println("Invalid Input");
   //Temperature 
-    if ((strcmp(currentKey,"command")== 0 ) && member.value() == "temperature")commandType = member.value();
     else if((strcmp(currentKey, "indoor") == 0) && strcmp(commandType,"temperature") == 0) Vals.tempIndoor = member.value().as<float>();
     else if((strcmp(currentKey, "outdoor") == 0) && strcmp(commandType,"temperature") == 0) Vals.tempOutdoor = member.value().as<float>();
-    
   //Humidity
-    if ((strcmp(currentKey,"command")== 0 ) && member.value().as<String>() == "humidity") commandType = member.value();
     else if((strcmp(currentKey, "indoor") == 0) && strcmp(commandType,"humidity") == 0) Vals.humIndoor = member.value().as<float>();
     else if((strcmp(currentKey,"outdoor") == 0) && strcmp(commandType,"humidity") == 0) Vals.humOutdoor = member.value().as<float>();
-  
   //Wind
-    if ((strcmp(currentKey,"command")== 0 ) && member.value().as<String>() == "wind") commandType = member.value();
     else if((strcmp(currentKey, "speed") == 0) && strcmp(commandType,"wind") == 0) Vals.windSpeed = member.value().as<float>();
     else if((strcmp(currentKey,"direction") == 0) && strcmp(commandType,"wind") == 0) Vals.windDir = member.value().as<float>();
-
-    //Rain
-    if ((strcmp(currentKey,"command")== 0 ) && member.value().as<String>() == "rain") commandType = member.value();
+  //Rain
     else if((strcmp(currentKey, "pwm") == 0) && strcmp(commandType,"wind") == 0) Vals.rainPwm = member.value().as<float>();
-
-    //Moisture
-    if ((strcmp(currentKey,"command")== 0 ) && member.value().as<String>() == "moisture") commandType = member.value();
-    else if((strcmp(currentKey,"out1") == 0) && strcmp(commandType,"moisture") == 0) Vals.windSpeed = member.value().as<float>();
+  //Moisture
+    else if((strcmp(currentKey,"out1") == 0) && strcmp(commandType,"moisture") == 0) Vals.windSpeed = member.value().as<float>();  
     else if((strcmp(currentKey,"out2") == 0) && strcmp(commandType,"moisture") == 0) Vals.windDir = member.value().as<float>();
     else if((strcmp(currentKey,"out3") == 0) && strcmp(commandType,"moisture") == 0) Vals.windDir = member.value().as<float>();
+
+    
 }
 
 
