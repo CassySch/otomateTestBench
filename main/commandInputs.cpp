@@ -1,77 +1,79 @@
-#include <ArduinoJson.h>
-#include <ArduinoJson.hpp>
+//#include <ArduinoJson.h>
+//#include <ArduinoJson.hpp>
 #include "commandInputs.h"
 
 EnVar Vals;
 
-void EnVar::extractVals(){
+void EnVar::applyValues(JsonDocument* doc) {
+  // Iterate over the members of the JSON object
+  for (JsonPair member : doc->as<JsonObject>()) {
+    const char* currentKey = member.key().c_str();
+    JsonObject commandObject = member.value();
+    //command verification
+    if (strcmp(currentKey, "temperature") == 0) {
+      //Value of key is an object containing possible settings
+      for (JsonPair kvp : commandObject) {
+        if (kvp.key() == "indoor") Vals.tempIndoor = kvp.value();
+        else if (kvp.key() == "outdoor") Vals.tempOutdoor = kvp.value();
+      }
+    }
+    else if (strcmp(currentKey, "humidity") == 0) {
+      for (JsonPair kvp : commandObject) {
+        if (kvp.key() == "indoor") Vals.humIndoor = kvp.value();
+        else if (kvp.key() == "outdoor") Vals.humOutdoor = kvp.value();
+      }
+    }
+    else if (strcmp(currentKey, "wind") == 0) {
+      for (JsonPair kvp : commandObject) {
+        if (kvp.key() == "speed") Vals.windSpeed = kvp.value();
+        else if (kvp.key() == "direction") Vals.windDir = kvp.value();
+      }
+    }
+    else if (strcmp(currentKey, "moisture") == 0) {
+      for (JsonPair kvp : commandObject) {
+        if (kvp.key() == "moisture1") Vals.windSpeed = kvp.value();
+        else if (kvp.key() == "moisture2") Vals.moisture1 = kvp.value();
+        else if (kvp.key() == "moisture3") Vals.moisture2 = kvp.value();
+        else if (kvp.key() == "moisture3") Vals.moisture3 = kvp.value();
+      }
+    } 
+    else if (strcmp(currentKey, "rain") == 0) {
+      Serial.println("rain");
+      Vals.rainPwm = member.value();
+    }
+    else Serial.println("Not a valid setting");
+  }
 
-const char* commandType;
-  // Parse the JSON object
-  JsonDocument doc;
-  DeserializationError error = deserializeJson(doc, Vals.inputBuffer);
-
-  // Check for parsing errors
-  if (error) {
-    Serial.print("Failed to parse JSON: ");
-    Serial.println(error.c_str());
-  } else {
-    // Iterate over the members of the JSON object
-for (JsonPair member : doc.as<JsonObject>()) {
-  const char* currentKey = member.key().c_str();
-  //command verification
-    if (strcmp(currentKey,"command") == 0 && member.value().is<String>()) commandType = member.value();
-  //Temperature 
-    else if (strcmp(commandType,"temperature") == 0 && member.value().is<float>()) {
-      if(strcmp(currentKey, "indoor") == 0) Vals.tempIndoor = member.value();
-      else if(strcmp(currentKey, "outdoor") == 0) Vals.tempOutdoor = member.value();
-    }
-  //Humidity
-    else if (strcmp(commandType,"humidity") == 0 && member.value().is<float>()) {
-      if(strcmp(currentKey, "indoor") == 0) Vals.humIndoor = member.value();
-      else if(strcmp(currentKey, "outdoor") == 0) Vals.humOutdoor = member.value();
-    }
-  //Wind
-    else if(strcmp(commandType,"wind") == 0 && member.value().is<float>()) {
-      if(strcmp(currentKey, "speed") == 0 ) Vals.windSpeed = member.value();
-      else if(strcmp(currentKey,"direction") == 0) Vals.windDir = member.value();
-    }
-  //Rain
-    else if(strcmp(commandType,"rain") == 0 && member.value().is<float>()) {
-      if (strcmp(currentKey, "pwm") == 0) Vals.rainPwm = member.value();
-    }
-  //Moisture
-    else if(strcmp(commandType,"moisture") == 0 && member.value().is<float>()) {
-      if (strcmp(currentKey, "out1") == 0) Vals.out1 = member.value();
-      else if (strcmp(currentKey, "out2") == 0) Vals.out2 = member.value();
-      else if (strcmp(currentKey, "out3") == 0) Vals.out3 = member.value();
-    }
-    else {
-        Serial.println("Invalid Input");
-        break;
-    }
-
-    
+  // Output the values
+  Serial.println("Indoor Temperature: " + String(Vals.tempIndoor));
+  Serial.println("Outdoor Temperature: " + String(Vals.tempOutdoor));
+  Serial.println("Outdoor Humidity: " + String(Vals.humOutdoor));
+  Serial.println("Indoor Humidity: " + String(Vals.humIndoor));
+  Serial.println("Wind Speed: " + String(Vals.windSpeed));
+  Serial.println("Wind Direction: " + String(Vals.windDir));
+  Serial.println("Rain: " + String(Vals.rainPwm));
 }
 
-// Output the values
-Serial.println("Indoor Temperature: " + String(Vals.tempIndoor));
-Serial.println("Outdoor Temperature: " + String(Vals.tempOutdoor));
-Serial.println("Outdoor Humidity: " + String(Vals.humOutdoor));
-Serial.println("Indoor Humidity: " + String(Vals.humIndoor));
-  }
-  delay(1000);
-}     
 
+DeserializationError getSerialJson(JsonDocument* doc) {
+  char request[MAX_INPUT_SIZE + 1];
+  char* p = request; //pointer to request array
+  int len = MAX_INPUT_SIZE;
 
-void EnVar::processRequest(const char* c){
-  // Read input until a newline character is encountered
-  for (int index = 0; index < strlen(c); index++){
-    if (c[index] == '\n') break; // Exit the loop when newline character is encountered
-    else Vals.inputBuffer[index] = c[index]; // Store character in inputBuffer
+  Serial.println("Enter JSON object:");
+  while (!Serial.available()) {}  // Wait for user input
+  while (len--) {
+    if (Serial.available() > 0) {
+      char c = Serial.read();
+      if (c == '\n') {
+        break;  // Exit the loop when newline character is encountered
+      } else {
+        *p++ = c;  //increment address of pointer and store c
+      }
+    }
   }
-  Vals.inputBuffer[index] = '\0'; // Add NULL at end of input buffer
-  Vals.extractVals();
+  *p = '\0';  // Add NULL at end of input
+
+  return deserializeJson(*doc, (const char *)request);
 }
-
 
