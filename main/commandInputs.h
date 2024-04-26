@@ -15,5 +15,5 @@ class EnVar {
     void setWindDir();
     void setMoisture();
     void loop();
-    void getRequest();
+    void processRequest(const char* c);
 };
