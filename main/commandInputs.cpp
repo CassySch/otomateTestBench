@@ -15,18 +15,21 @@ void EnVar::applyValues(JsonDocument* doc) {
       for (JsonPair kvp : commandObject) {
         if (kvp.key() == "indoor") Vals.tempIndoor = kvp.value();
         else if (kvp.key() == "outdoor") Vals.tempOutdoor = kvp.value();
+        Serial.println("{ \"response\": \"temperature\", \"status\" : \"ok\" }");
       }
     }
     else if (strcmp(currentKey, "humidity") == 0) {
       for (JsonPair kvp : commandObject) {
         if (kvp.key() == "indoor") Vals.humIndoor = kvp.value();
         else if (kvp.key() == "outdoor") Vals.humOutdoor = kvp.value();
+        Serial.println("{ \"response\": \"humidity\", \"status\" : \"ok\" }");
       }
     }
     else if (strcmp(currentKey, "wind") == 0) {
       for (JsonPair kvp : commandObject) {
         if (kvp.key() == "speed") Vals.windSpeed = kvp.value();
         else if (kvp.key() == "direction") Vals.windDir = kvp.value();
+        Serial.println("{ \"response\": \"wind\", \"status\" : \"ok\" }");
       }
     }
     else if (strcmp(currentKey, "moisture") == 0) {
@@ -35,11 +38,13 @@ void EnVar::applyValues(JsonDocument* doc) {
         else if (kvp.key() == "moisture2") Vals.moisture1 = kvp.value();
         else if (kvp.key() == "moisture3") Vals.moisture2 = kvp.value();
         else if (kvp.key() == "moisture3") Vals.moisture3 = kvp.value();
+        Serial.println("{ \"response\": \"soil\", \"status\" : \"ok\" }");
       }
     } 
     else if (strcmp(currentKey, "rain") == 0) {
       Serial.println("rain");
       Vals.rainPwm = member.value();
+      Serial.println("{ \"response\": \"rain\", \"status\" : \"ok\" }");
     }
     else Serial.println("Not a valid setting");
   }
