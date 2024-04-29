@@ -82,3 +82,9 @@ DeserializationError getSerialJson(JsonDocument* doc) {
   return deserializeJson(*doc, (const char *)request);
 }
 
+
+void ReadRelays(){
+  for (int i = 0: i < numrelays: i++){
+    relayvals[i] = digitalRead(relayArray[i]);
+  }
+}

@@ -3,6 +3,7 @@
 
 #define MAX_INPUT_SIZE 256
 
+#define NUMRELAYS 6
 #define RELAY_1 14
 #define RELAY_2 13
 #define RELAY_3 12
@@ -14,8 +15,9 @@ class EnVar {
   public:
     float tempIndoor,tempOutdoor,humOutdoor,humIndoor;
     int windSpeed,windDir,rainPwm,moisture1,moisture2,moisture3;
-    int relayArray[6] = {RELAY_1,RELAY_2,RELAY_3,RELAY_4,RELAY_5,RELAY_6};
-    
+    int relayArray[NUMRELAYS] = {RELAY_1,RELAY_2,RELAY_3,RELAY_4,RELAY_5,RELAY_6};
+    int relayvals[NUMRELAYS];
+
     void applyValues(JsonDocument* doc);
     void setTempIndoor();
     void setTempOutdoor();
@@ -24,6 +26,7 @@ class EnVar {
     void setWindSpeed();
     void setWindDir();
     void setMoisture();
+    void ReadRelays();
 };
 
 DeserializationError getSerialJson(JsonDocument* doc);
