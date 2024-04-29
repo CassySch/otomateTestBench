@@ -11,12 +11,15 @@
 #define RELAY_5 10
 #define RELAY_6 9
 
+#define NOT_VALID_DATA 0
+#define VALID_DATA 1
+
 class EnVar {
   public:
     float tempIndoor,tempOutdoor,humOutdoor,humIndoor;
     int windSpeed,windDir,rainPwm,moisture1,moisture2,moisture3;
     int relayArray[NUMRELAYS] = {RELAY_1,RELAY_2,RELAY_3,RELAY_4,RELAY_5,RELAY_6};
-    int relayvals[NUMRELAYS];
+    int relayVals[NUMRELAYS];
 
     void applyValues(JsonDocument* doc);
     void setTempIndoor();

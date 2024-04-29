@@ -3,8 +3,9 @@
 #include "commandInputs.h"
 
 EnVar Vals;
+bool dataFlag = NOT_VALID_DATA;
 
-void EnVar::applyValues(JsonDocument* doc) {
+void EnVar::applyValues(JsonDocument* doc) {  
   // Iterate over the members of the JSON object
   for (JsonPair member : doc->as<JsonObject>()) {
     const char* currentKey = member.key().c_str();
@@ -48,7 +49,6 @@ void EnVar::applyValues(JsonDocument* doc) {
     }
     else Serial.println("Not a valid setting");
   }
-
   // Output the values
   Serial.println("Indoor Temperature: " + String(Vals.tempIndoor));
   Serial.println("Outdoor Temperature: " + String(Vals.tempOutdoor));
@@ -78,13 +78,20 @@ DeserializationError getSerialJson(JsonDocument* doc) {
     }
   }
   *p = '\0';  // Add NULL at end of input
-
-  return deserializeJson(*doc, (const char *)request);
+ 
+  DeserializationError error = deserializeJson(*doc, (const char *)request);
+  //Serial.println(error);
+  if(error == DeserializationError::EmptyInput || error == DeserializationError::IncompleteInput 
+  || error == DeserializationError::InvalidInput || DeserializationError::NoMemory || DeserializationError::TooDeep){
+    Serial.println("NOT VALID JSON");
+    dataFlag = NOT_VALID_DATA;
+  }
+  else dataFlag = VALID_DATA;
+  return error; 
 }
 
-
-void ReadRelays(){
-  for (int i = 0: i < numrelays: i++){
-    relayvals[i] = digitalRead(relayArray[i]);
+void EnVar::ReadRelays(){
+  for (int i = 0; i < NUMRELAYS; i++){
+    relayVals[i] = digitalRead(relayArray[i]);
   }
 }
