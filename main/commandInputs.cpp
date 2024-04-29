@@ -47,6 +47,10 @@ void EnVar::applyValues(JsonDocument* doc) {
       Vals.rainPwm = member.value();
       Serial.println("{ \"response\": \"rain\", \"status\" : \"ok\" }");
     }
+     else if (strcmp(currentKey, "inputs") == 0) {
+      ReadRelays();
+      Serial.println("{\"response\":\"inputs\",\"values\":[" + String(relayVals[0]) + "," + String(relayVals[1]) + "," + String(relayVals[2]) + "," + String(relayVals[3]) + "," + String(relayVals[4]) + "," +  String(relayVals[5]) + "," + String(relayVals[6]) + "]}");
+    }
     else Serial.println("Not a valid setting");
   }
   // Output the values
