@@ -32,4 +32,5 @@ class EnVar {
     void ReadRelays();
 };
 
-DeserializationError getSerialJson(JsonDocument* doc);
+const char* getSerialJson(char* request);
+DeserializationError validateJson(const char* jsonString,JsonDocument* doc);

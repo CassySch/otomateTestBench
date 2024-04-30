@@ -12,10 +12,13 @@ void setup() {
 }
 void loop() { 
   JsonDocument doc;
-  
-  //const char* json = "{\"temperature\":{\"indoor\":24,\"outdoor\":20}}";
+  char inputArray[MAX_INPUT_SIZE + 1];
+
+  //const char* json = "{\"temperature\":{\"indoor\":14,\"outdoor\":20}}";
   //deserializeJson(doc, json);
 
-  getSerialJson(&doc);
+  const char* request = getSerialJson(inputArray);
+  //Serial.println(request);
+  validateJson(request,&doc);
   command.applyValues(&doc);
 }
