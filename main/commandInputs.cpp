@@ -11,6 +11,7 @@ void EnVar::applyValues(JsonDocument* doc) {
   // Iterate over the members of the JSON object
   for (JsonPair member : doc->as<JsonObject>()) {
     const char* currentKey = member.key().c_str();
+    const char* memberKey;
     JsonObject commandObject = member.value();
     //command verification
     if (strcmp(currentKey, "temperature") == 0) {
@@ -18,18 +19,33 @@ void EnVar::applyValues(JsonDocument* doc) {
       for (JsonPair kvp : commandObject) {
         if (kvp.key() == "indoor") Vals.tempIndoor = kvp.value();
         else if (kvp.key() == "outdoor") Vals.tempOutdoor = kvp.value();
+        else{
+           Serial.print("Not a valid member:");
+           memberKey = kvp.key().c_str();
+           Serial.println(memberKey);
+        }
       }
       Serial.println("{ \"response\": \"temperature\", \"status\" : \"ok\" }");
     } else if (strcmp(currentKey, "humidity") == 0) {
       for (JsonPair kvp : commandObject) {
         if (kvp.key() == "indoor") Vals.humIndoor = kvp.value();
         else if (kvp.key() == "outdoor") Vals.humOutdoor = kvp.value();
+        else{
+           Serial.print("Not a valid member:");
+           memberKey = kvp.key().c_str();
+           Serial.println(memberKey);
+        }
       }
       Serial.println("{ \"response\": \"humidity\", \"status\" : \"ok\" }");
     } else if (strcmp(currentKey, "wind") == 0) {
       for (JsonPair kvp : commandObject) {
         if (kvp.key() == "speed") Vals.windSpeed = kvp.value();
-        else if (kvp.key() == "direction") Vals.windDir = kvp.value();
+        else if (kvp.key() == "direction")Vals.windDir = kvp.value();
+        else{
+           Serial.print("Not a valid member:");
+           memberKey = kvp.key().c_str();
+           Serial.println(memberKey);
+        }
       }
       Serial.println("{ \"response\": \"wind\", \"status\" : \"ok\" }");
     } else if (strcmp(currentKey, "moisture") == 0) {
@@ -38,6 +54,11 @@ void EnVar::applyValues(JsonDocument* doc) {
         else if (kvp.key() == "moisture2") Vals.moisture1 = kvp.value();
         else if (kvp.key() == "moisture3") Vals.moisture2 = kvp.value();
         else if (kvp.key() == "moisture3") Vals.moisture3 = kvp.value();
+        else{
+           Serial.print("Not a valid member:");
+           memberKey = kvp.key().c_str();
+           Serial.println(memberKey);
+        }
       }
       Serial.println("{ \"response\": \"soil\", \"status\" : \"ok\" }");
     } else if (strcmp(currentKey, "rain") == 0) {
@@ -45,7 +66,7 @@ void EnVar::applyValues(JsonDocument* doc) {
       Serial.println("{ \"response\": \"rain\", \"status\" : \"ok\" }");
     } else if (strcmp(currentKey, "inputs") == 0) {
       ReadRelays();
-      Serial.println("{\"response\":\"inputs\",\"values\":[" + String(relayVals[0]) + "," + String(relayVals[1]) + "," + String(relayVals[2]) + "," + String(relayVals[3]) + "," + String(relayVals[4]) + "," + String(relayVals[5]) + "," + String(relayVals[6]) + "]}");
+      Serial.println("{\"response\":\"inputs\",\"values\":[" + String(relayVals[0]) + "," + String(relayVals[1]) + "," + String(relayVals[2]) + "," + String(relayVals[3]) + "," + String(relayVals[4]) + "," + String(relayVals[5]) + "]}");
     } else {
       Serial.print("Not a recognized value:");
       Serial.println(currentKey);
@@ -87,6 +108,7 @@ const char* getSerialJson(char* request) {
 
 DeserializationError validateJson(const char* jsonString, JsonDocument* doc) {
   DeserializationError error = deserializeJson(*doc, jsonString);
+  if(jsonString[0] != '{') error = DeserializationError::IncompleteInput; //desirializeJson doesn't seem to generate an error when { is missing
   if (error == DeserializationError::EmptyInput
       || error == DeserializationError::IncompleteInput
       || error == DeserializationError::InvalidInput
