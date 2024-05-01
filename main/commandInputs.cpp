@@ -3,8 +3,8 @@
 #include "commandInputs.h"
 
 EnVar Vals;
-bool dataFlag = NOT_VALID_DATA;
 
+extern bool dataFlag;
 void EnVar::applyValues(JsonDocument* doc) {
   if(dataFlag == NOT_VALID_DATA) return;
   else{
@@ -84,44 +84,7 @@ void EnVar::applyValues(JsonDocument* doc) {
 }
 
 
-const char* getSerialJson(char* request) {
-  //char request[MAX_INPUT_SIZE + 1];
-  char* p = request;  //pointer to request array
-  int len = MAX_INPUT_SIZE;
 
-  Serial.println("Enter JSON object:");
-  while (!Serial.available()) {}  // Wait for user input
-  while (len--) {
-    if (Serial.available() > 0) {
-      char c = Serial.read();
-      if (c == '\n') {
-        break;  // Exit the loop when newline character is encountered
-      } else {
-        *p++ = c;  //increment address of pointer and store c
-      }
-    }
-  }
-  *p = '\0';  // Add NULL at end of input
 
-  return request;
-}
 
-DeserializationError validateJson(const char* jsonString, JsonDocument* doc) {
-  DeserializationError error = deserializeJson(*doc, jsonString);
-  if(jsonString[0] != '{') error = DeserializationError::IncompleteInput; //desirializeJson doesn't seem to generate an error when { is missing
-  if (error == DeserializationError::EmptyInput
-      || error == DeserializationError::IncompleteInput
-      || error == DeserializationError::InvalidInput
-      || error == DeserializationError::NoMemory
-      || error == DeserializationError::TooDeep) {
-    Serial.println("NOT VALID JSON");
-    dataFlag = NOT_VALID_DATA;
-  } else dataFlag = VALID_DATA;
-  return error;
-}
 
-void EnVar::ReadRelays() {
-  for (int i = 0; i < NUMRELAYS; i++) {
-    relayVals[i] = digitalRead(relayArray[i]);
-  }
-}

@@ -1,14 +1,13 @@
 #include "commandInputs.h"
+#include "relays.h"
+
+hw_timer_t * timer = NULL;
 
 EnVar command;
 void setup() {
   Serial.begin(115200);
-  pinMode(RELAY_1, OUTPUT);
-  pinMode(RELAY_2, INPUT);
-  pinMode(RELAY_3, OUTPUT);
-  pinMode(RELAY_4, INPUT);
-  pinMode(RELAY_5, INPUT);
-  pinMode(RELAY_6, INPUT);
+  relayInit();
+
 }
 void loop() { 
   JsonDocument doc;

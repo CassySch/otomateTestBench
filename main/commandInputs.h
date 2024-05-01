@@ -1,15 +1,10 @@
 #include <ArduinoJson.h>
 #include <ArduinoJson.hpp>
+#include "relays.h"
 
 #define MAX_INPUT_SIZE 256
 
-#define NUMRELAYS 6
-#define RELAY_1 14
-#define RELAY_2 13
-#define RELAY_3 12
-#define RELAY_4 11
-#define RELAY_5 10
-#define RELAY_6 9
+
 
 #define NOT_VALID_DATA 0
 #define VALID_DATA 1
