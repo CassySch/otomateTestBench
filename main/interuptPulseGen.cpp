@@ -2,10 +2,10 @@
 #include "commandInputs.h"
 
 hw_timer_t *timer = NULL;
-
 int timeOn, timeOff;
-int numPin;
 int cnt = 0;
+int prescalerVal;
+extern int numPin;
 
 void IRAM_ATTR pulse(){
   noInterrupts(); // Disable interrupts
@@ -22,14 +22,17 @@ void IRAM_ATTR pulse(){
     interrupts(); // Re-enable interrupts
 }
 
-void pwmInitTimer0(int prescaler, int onTime, int offTime, int pinNum){
+void pwmInitTimer0(int prescaler){
+    if(timer == NULL){
+      timer = timerBegin(0, prescaler, true);
+      timerAttachInterrupt(timer, &pulse, true);
+      timerAlarmWrite(timer, 300, false); //Set the timer's trigger event initially trigers an iterupt at tick 300 to give time to the setup to happen and does not reload after interupt
+      timerAlarmEnable(timer);
+    }
+}
+
+void setPwm(int onTime, int offTime, int pinNum){
     timeOn = onTime;
     timeOff = offTime;
     numPin = pinNum;
-    timer = timerBegin(0, prescaler, true);   // Initialize Timer 0 with a prescaler of 80 (80 MHz / 80 = 1 MHz)
-    timerAttachInterrupt(timer, &pulse, true);
-    timerAlarmWrite(timer, 0, false); //Set the timer's trigger event initially triigers an iterupt at tick 0 and does not reload after interupt
-    timerAlarmEnable(timer);
-    pinMode(pinNum,OUTPUT);
 }
-

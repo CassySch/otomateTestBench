@@ -26,8 +26,7 @@ class EnVar {
     void setMoisture();
     void ReadRelays();
 };
-
 const char* getSerialJson(char* request);
 DeserializationError validateJson(const char* jsonString,JsonDocument* doc);
-void pwmInitTimer0(int prescaler, int onTime, int offTime, int pinNum);
-
+void pwmInitTimer0(int prescaler);
+void setPwm(int onTime, int offTime, int pinNum);
