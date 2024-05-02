@@ -1,13 +1,11 @@
 #include "commandInputs.h"
 #include "relays.h"
 
-hw_timer_t * timer = NULL;
-
 EnVar command;
 void setup() {
   Serial.begin(115200);
   relayInit();
-
+  pwmInitTimer0(80,3000000,1000000,4);
 }
 void loop() { 
   JsonDocument doc;
