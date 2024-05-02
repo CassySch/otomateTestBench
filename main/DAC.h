@@ -1,3 +1,8 @@
+//Voltage macros
+#define MAX_VOLTAGE 4.75
+
+//dac resolution
+#define DAC_RES 4095
 
 // Define I2C pins
 #define DAC_1_SDA_PIN 7  // Example pin for SDA
