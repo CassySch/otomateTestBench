@@ -8,8 +8,8 @@ EnVar command;
 void setup() {
   Serial.begin(115200);
   relayInit();
-  DacCommunicationInit(DAC_1_SDA_PIN,DAC_1_SCL_PIN);
-  send_to_dac(DAC_1_ADDRESS,3.0);
+  DacInit();
+  send_to_dac(DAC_1_ADDRESS, 3.0, 0);
 
 }
 void loop() { 

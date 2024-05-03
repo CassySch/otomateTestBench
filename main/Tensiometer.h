@@ -4,4 +4,4 @@
 #define MAX_CBAR 93
 
 //function prototype
-void setTensiometer(int cbar, int tensiometer_num);
+void setTensiometer(int cbar, int meter_num);
