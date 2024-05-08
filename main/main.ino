@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(115200);
   relayInit();
   DacInit();
-  send_to_dac(DAC_1_ADDRESS, 3.0, 0);
+  SendToDac(DAC_1_ADDRESS, 2.0, 0);
 
 }
 void loop() { 

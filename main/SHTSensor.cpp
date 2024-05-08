@@ -1,8 +1,9 @@
 #include <math.h>
+#include <arduino.h>
 
 //#define  TWELVE_BIT_HUM
 #define EIGHT_BIT_HUM
-
+/*
 #ifdef TWELVE_BIT_HUM
   #define C1 -2.0468
   #define C2 0.0367
@@ -73,3 +74,4 @@ switch(state){
   case reading:
     break;
 }
+*/
