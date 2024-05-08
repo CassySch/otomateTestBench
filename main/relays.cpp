@@ -7,9 +7,9 @@ void EnVar::ReadRelays() {
 }
 
 void relayInit(){
-  pinMode(RELAY_1, OUTPUT);
+  pinMode(RELAY_1, INPUT);
   pinMode(RELAY_2, INPUT);
-  pinMode(RELAY_3, OUTPUT);
+  pinMode(RELAY_3, INPUT);
   pinMode(RELAY_4, INPUT);
   pinMode(RELAY_5, INPUT);
   pinMode(RELAY_6, INPUT);
