@@ -15,8 +15,8 @@
 
 class EnVar {
   public:
-    float tempIndoor,tempOutdoor,humOutdoor,humIndoor;
-    int windSpeed,windDir,rainPwm,moisture1,moisture2,moisture3;
+    float tempIndoor, tempOutdoor, humOutdoor, humIndoor;
+    int windSpeed, windDir, rainPwm, moisture1, moisture2, moisture3;
     int relayArray[NUMRELAYS] = {RELAY_1,RELAY_2,RELAY_3,RELAY_4,RELAY_5,RELAY_6};
     int relayVals[NUMRELAYS];
 

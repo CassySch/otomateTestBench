@@ -8,5 +8,5 @@ void SetWind(float speed, int degrees){
   setPwm(pulse_ms, pulse_ms, PinAnemometer); //sets pwm pulse signal according to wind speed set
   
   SensorOut = ((degrees/360)*1023)/(5.0/1023.0); //determines output voltage for simulated anemometer
-  SendToDac(DAC_1_ADDRESS, SensorOut, GROUP_ANEMOMETER); //sets the DAC to the analog voltage value corresponding to the wind direction
+  SendToDac(DAC_2_ADDRESS, SensorOut, GROUP_ANEMOMETER); //sets the DAC to the analog voltage value corresponding to the wind direction
 }

@@ -5,6 +5,7 @@
 //sets the DAC to simulated tensiometer voltage output value
 void setTensiometer(int cbar, int meter_num){
   float voltage = cbar * SCALE_CBAR;
-  int dacAddr = (meter_num == 0) ? DAC_1_ADDRESS : DAC_2_ADDRESS;
-  SendToDac(dacAddr, voltage, GROUP_TENSIOMETER); //utilises first i2c bus, with two DACs for indoor and outdoor humidity
+  int dacAddr = (meter_num == 0 || meter_num == 2) ? DAC_1_ADDRESS : DAC_2_ADDRESS;
+  int groupnum = (meter_num == 0 || meter_num == 1) ? 0 : 1;
+  send_to_dac(dacAddr, voltage, groupnum); //utilises first i2c bus, with two DACs for indoor and outdoor humidity
 }
