@@ -50,9 +50,8 @@ void EnVar::applyValues(JsonDocument* doc) {
       Serial.println("{ \"response\": \"wind\", \"status\" : \"ok\" }");
     } else if (strcmp(currentKey, "moisture") == 0) {
       for (JsonPair kvp : commandObject) {
-        if (kvp.key() == "moisture1") Vals.windSpeed = kvp.value();
-        else if (kvp.key() == "moisture2") Vals.moisture1 = kvp.value();
-        else if (kvp.key() == "moisture3") Vals.moisture2 = kvp.value();
+        if (kvp.key() == "moisture1") Vals.moisture1 = kvp.value();
+        else if (kvp.key() == "moisture2") Vals.moisture2 = kvp.value();
         else if (kvp.key() == "moisture3") Vals.moisture3 = kvp.value();
         else{
            Serial.print("Not a valid member:");

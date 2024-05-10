@@ -1,6 +1,7 @@
 #include <ArduinoJson.h>
 #include <ArduinoJson.hpp>
 #include "relays.h"
+#include "Tensiometer.h"
 
 #define MAX_INPUT_SIZE 256
 
