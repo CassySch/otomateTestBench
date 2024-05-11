@@ -2,11 +2,13 @@
 #include "RainSensor.h"
 #include <Arduino.h>
 
+
 static int tipCount=0, neededPulses=0;
 void isr_rg() {
   tipCount++; //increments pulse number
   if (tipCount>=neededPulses) {
-    ledc_stop(LEDC_LOW_SPEED_MODE, pwmChannel); // Stop the PWM signal
+    ledc_stop(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 1);
+    //ledc_stop(LEDC_LOW_SPEED_MODE, pwmChannel, 1); // Stop the PWM signal
     tipCount = 0; //resets pwm count
   }
 }
